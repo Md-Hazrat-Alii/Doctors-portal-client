@@ -17,45 +17,45 @@ const AddDoctor = () => {
         formData.append('image', image);
         console.log(formData)
         const url = `https://api.imgbb.com/1/upload?key=${imageStorageKey}`;
-        fetch(url,{
+        fetch(url, {
             method: 'POST',
             body: formData
         })
-        .then(res => res.json())
-        .then(result => {
-            if(result.success === true){
-                const img = result.data.url;
-                const doctor = {
-                    name: data.name,
-                    email: data.email,
-                    specialty: data.specialty,
-                    img: img
-                };
+            .then(res => res.json())
+            .then(result => {
+                if (result.success === true) {
+                    const img = result.data.url;
+                    const doctor = {
+                        name: data.name,
+                        email: data.email,
+                        specialty: data.specialty,
+                        img: img
+                    };
 
-                // send doctor to database via server
+                    // send doctor to database via server
 
-                fetch('https://doctors-portal-server-side.up.railway.app/doctors', {
-                    method: 'POST',
-                    headers: {
-                        'content-type': 'application/json',
-                        authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                    },
-                    body: JSON.stringify(doctor)
+                    fetch('https://doctors-portal-server-side.up.railway.app/doctors', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${localStorage.getItem('accessToken')}`
+                        },
+                        body: JSON.stringify(doctor)
 
-                })
-                .then(res => res.json())
-                .then(inserted => {
-                    if(inserted.insertedId){
-                        toast.success('Doctor added successfully');
-                        reset();
-                    }
-                    else{
-                        toast.error('Failed to added doctor')
-                    }
-                })
+                    })
+                        .then(res => res.json())
+                        .then(inserted => {
+                            if (inserted.insertedId) {
+                                toast.success('Doctor added successfully');
+                                reset();
+                            }
+                            else {
+                                toast.error('Failed to added doctor')
+                            }
+                        })
 
-            }
-        })
+                }
+            })
     };
 
     if (isLoading) {
